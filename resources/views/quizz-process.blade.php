@@ -125,6 +125,7 @@
                 // hapus local storage
                 localStorage.removeItem('answers')
                 window.location.href = '/quizz/1'
+                // TODO Aksi jika waktu habis
             }
         }, 1000)
     })
@@ -173,13 +174,23 @@
 
     $('#startQuiz').click(function() {
         $('#requestFullscreenModal').modal('hide')
-        document.documentElement.requestFullscreen()
+        requestFullscreen()
     })
 
     // on close modal
     $('#mapQuestionModal').on('hidden.bs.modal', function (e) {
         checkFullscreen()
     })
+
+    $(document).on("fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange", onFullscreenChange);
+
+    function onFullscreenChange() {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            resetAllQuestion()
+            // TODO Aksi Jika keluar dari fullscreen
+            $('#requestFullscreenModal').modal('show')
+        }
+    }
 
     const renderQuestion = (index, init = false) => {
         const question = Questions[index]
@@ -213,6 +224,7 @@
                 checkFullscreen()
             }
         }
+        $('#questionNumber').text(index + 1)
     }
 
     const changeQuestion = (typeChange) => {
@@ -310,10 +322,30 @@
     }
 
     const checkFullscreen = () => {
-        if (!document.fullscreenElement) {
-            window.location.href = '/quizz/1'
+        onFullscreenChange()
+        return document.fullscreenElement && document.webkitFullscreenElement
+    }
+
+    const requestFullscreen = () => {
+        let element = document.documentElement;
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.webkitRequestFullscreen) {
+            element.webkitRequestFullscreen(); // Safari
+        } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen(); // Firefox
+        } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen(); // Internet Explorer
         }
-        return document.fullscreenElement
+    }
+
+    const resetAllQuestion = () => {
+        localStorage.removeItem('answers')
+        currentQuestion = 0
+        renderQuestion(currentQuestion, true)
+        $('#previous-btn').attr('disabled', true)
+        $('#next-btn').text('Next')
+        $('#next-btn').attr('data-finish', false)
     }
 
 

@@ -7,9 +7,12 @@
         <i class="bi bi-arrow-left-circle-fill"></i> Kembali
     </a>
     <div class="wrapp">
-        <h4 class="text-white fw-bold">
+        <h4 class="text-white fw-bold mb-0">
             Javascript Quiz
         </h4>
+        <small class="text-end text-white d-block">
+            private - class (236283726)
+        </small>
         <div class="d-flex justify-content-end">
             <div class="d-flex align-items-center">
                 <i class="bi bi-star-fill text-warning"></i>
@@ -47,8 +50,9 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-center my-3">
-    <button id="playQuizz" class="btn btn-warning w-100">Start</button>
+<div class="d-flex justify-content-center my-3 gap-1">
+    <button id="playQuizz" class="btn btn-warning flex-fill">Start</button>
+    <button class="btn btn-light tb-btn-danger"><i class="bi bi-bookmark-fill"></i></button>
 </div>
 
 @endsection

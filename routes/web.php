@@ -21,3 +21,12 @@ Route::get('/quizz/{id}', function ($id) {
 Route::get('/quizz/{id}/play', function ($id) {
     return view('quizz-process', ['id' => $id]);
 })->middleware('auth');
+Route::get('/classes', function () {
+    return view('classes');
+})->middleware('auth');
+Route::get('/classes/{id}', function ($id) {
+    return view('class-preview', ['id' => $id]);
+})->middleware('auth');
+Route::get('/saved', function () {
+    return view('saved');
+})->middleware('auth');

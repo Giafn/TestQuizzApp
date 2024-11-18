@@ -3,7 +3,7 @@
 @section('title', 'Profile')
 @section('content')
 <div class="text-center">
-    <img src="https://api.dicebear.com/9.x/thumbs/svg?seed={{ auth()->user()->name }}" alt="Profile" class="rounded-pill w-100 border border-white" style="max-width: 100px">
+    <img src="https://api.dicebear.com/9.x/dylan/svg?seed={{ auth()->user()->name }}" alt="Profile" class="rounded-pill w-100 border border-white" style="max-width: 100px">
     <h4 class="mt-3 text-white fw-bold">{{ auth()->user()->name }}</h4>
     <p class="text-white">{{ auth()->user()->email }}</p>
 </div>
@@ -14,7 +14,15 @@
     <form method="POST" action="">
         @csrf
         @method('PUT')
-        {{-- email --}}
+        {{-- name --}}
+        <div class="mb-3">
+            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ auth()->user()->name }}" required autocomplete="name" placeholder="Name" autofocus>
+            @error('name')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
         <div class="mb-3">
             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ auth()->user()->email }}" required autocomplete="email" placeholder="Email" autofocus>
             @error('email')

@@ -10,7 +10,7 @@
                     <i class="bi bi-arrow-up-right-circle-fill text-primary" style="font-size: 3em"></i>
                 </div>
                 <div class="flex-grow-1 ms-3 d-flex justify-content-center flex-column">
-                    <span class="text-secondary">Your Pts</span>
+                    <span class="text-secondary">Your Poin</span>
                     <h4 class="fw-bold">90 pts </h4>
                 </div>
             </div>
@@ -29,7 +29,7 @@
     </div>
 </div>
 <div class="d-flex my-3">
-    <input type="text" class="input-search form-control px-4 py-3 border-0" placeholder="Search Quiz" aria-label="Search Quiz" aria-describedby="button-addon2">
+    <input type="text" class="bg-white input-search form-control px-4 py-3 border-0" placeholder="Search Quiz" aria-label="Search Quiz" aria-describedby="button-addon2">
     <button class="btn bg-white btn-search border-0" type="button" id="button-addon2">
         <i class="bi bi-search"></i>
     </button>
@@ -108,16 +108,16 @@ $lastQuizz = [
 <div class="">
     <div class="w-100 d-flex flex-column gap-1">
         @foreach($lastQuizz as $item)
-        <a href="" class="text-decoration-none">
-            <div class="card bg-primary bg-white me-2" style="min-width: 200px">
+        <a href="" class="text-decoration-none d-block">
+            <div class="card bg-primary bg-white me-2 w-100">
                 <div class="card-body">
-                    <div class="d-flex gap-1 justify-content-between align-items-center">
-                        <div class="d-flex flex-column" style="max-width: 150px">
+                    <div class="d-flex gap-3 justify-content-between align-items-center">
+                        <div class="d-flex flex-column flex-fill">
                             <h5 class="fw-bold">{{ $item['name'] }}</h5>
                             <span class="text-dark">{{ $item['category'] }}</span>
                             <span class="text-dark">Score: {{ $item['score'] }}</span>
                         </div>
-                        <i class="bi bi-check-circle-fill text-primary" style="font-size: 2em"></i>
+                        <i class="bi bi-check-circle-fill text-warning" style="font-size: 2em"></i>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Quizz-App</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,6 +53,29 @@
         #profileNavImg {
             border-width: 3px !important;
         }
+        /* Mengatur lebar scrollbar */
+        ::-webkit-scrollbar {
+            width: 3px; /* Untuk scrollbar vertikal */
+            height: 3px; /* Untuk scrollbar horizontal */
+        }
+
+        /* Mengatur tampilan slider di scrollbar */
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.7); /* Warna hitam dengan transparansi 70% */
+            border-radius: 10px; /* Membuat sudutnya bulat (opsional) */
+        }
+
+        /* Mengatur track scrollbar */
+        ::-webkit-scrollbar-track {
+            background: transparent; /* Track scrollbar tetap transparan */
+        }
+
+        /* Mendukung browser lain (opsional) */
+        body {
+            scrollbar-width: thin; /* Untuk Firefox: membuat scrollbar lebih tipis */
+            scrollbar-color: rgba(0, 0, 0, 0.7) transparent; /* Warna thumb dan track */
+        }
+
     </style>
 </head>
 <body>
@@ -61,9 +84,9 @@
             <div class="content px-3 py-3">
                 <div class="p-3 d-flex justify-content-between align-items-center mb-2">
                     <a href="/profile">
-                        <img id="profileNavImg" src="https://api.dicebear.com/9.x/thumbs/svg?seed={{ auth()->user()->name }}" alt="Profile" class="rounded-pill w-100 border border-white" style="max-width: 50px">
+                        <img id="profileNavImg" src="https://api.dicebear.com/9.x/dylan/svg?seed={{ auth()->user()->name }}" alt="Profile" class="rounded-pill w-100 border border-white" style="max-width: 50px">
                     </a>
-                    <h4 href="/" class="text-white fw-bold">Quizz-App</h4>
+                    <h4 href="/" class="text-white fw-bold">Quizz-<span class="text-warning">App</span></h4>
                 </div>
                 <div class="header-content">
                     <h2 class="text-start">
@@ -91,9 +114,15 @@
                         </a>
                     </li>
                     <li class="nav-item d-flex align-items-end">
-                        <a href="/setting" class="nav-link {{ strpos(request()->path(), 'setting') === 0 ? 'text-primary' : ''}}">
-                            <i class="bi bi-gear-fill p-5" style="font-size: 1.5em"></i>
-                            <span class="d-block fw-bold">Setting</span>
+                        <a href="/classes" class="nav-link {{ strpos(request()->path(), 'classes') === 0 ? 'text-primary' : ''}}">
+                            <i class="bi bi-book-fill" style="font-size: 1.5em"></i>
+                            <span class="d-block fw-bold">Classes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item d-flex align-items-end">
+                        <a href="/saved" class="nav-link {{ strpos(request()->path(), 'saved') === 0 ? 'text-primary' : ''}}">
+                            <i class="bi bi-bookmark-fill" style="font-size: 1.5em"></i>
+                            <span class="d-block fw-bold">Saved</span>
                         </a>
                     </li>
                 </ul>

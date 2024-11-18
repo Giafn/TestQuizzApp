@@ -1,48 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Quizzes')
+@section('title', 'Saved Quizzes')
 @section('content')
-@php
-$trending = [
-    [
-        'title' => 'Javascript Quiz',
-        'description' => 'This is a javascript quiz'
-    ],
-    [
-        'title' => 'PHP Quiz',
-        'description' => 'This is a PHP quiz'
-    ],
-    [
-        'title' => 'Laravel Quiz',
-        'description' => 'This is a Laravel quiz'
-    ],
-    [
-        'title' => 'Vue Quiz',
-        'description' => 'This is a Vue quiz'
-    ]
-];
-@endphp
-<h5 class="text-white fw-bold my-3">Trending Quizz</h5>
-<div class="d-flex overflow-x-auto">
-    @foreach($trending as $quiz)
-    <div class="card border-0 me-3" style="min-width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">{{ $quiz['title'] }}</h5>
-            <p class="card-text">{{ $quiz['description'] }}</p>
-            <div class="d-flex justify-content-between align-items-end">
-                <a href="/quizz/{{ 1 }}" class="btn btn-warning">Start</a>
-                <small class="text-muted">1200 Played</small>
-            </div>
-        </div>
-    </div>
-    @endforeach
-</div>
-<div class="d-flex my-3">
-    <input type="text" class="bg-white input-search form-control px-4 py-3 border-0" placeholder="Search Quiz" aria-label="Search Quiz" aria-describedby="button-addon2">
-    <button class="btn bg-white btn-search border-0" type="button" id="button-addon2">
-        <i class="bi bi-search"></i>
-    </button>
-</div>
+
 @php
 $quizzes = [
     [
@@ -79,6 +39,9 @@ $quizzes = [
                 <div class="d-flex gap-3 justify-content-between align-items-center">
                     <div class="d-flex flex-column flex-fill" >
                         <h5 class="fw-bold mb-0">{{ $item['title'] }}</h5>
+                        <small class="text-muted">
+                            public
+                        </small>
                         <div>
                             <span class="badge bg-primary">{{ $item['category'] }}</span>
                         </div>
@@ -91,4 +54,20 @@ $quizzes = [
     </a>
     @endforeach
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    function copyToClipboard(element) {
+        const text = document.querySelector(element).innerText;
+        const input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+
+        alert('Copied to clipboard');
+    }
+</script>
 @endsection

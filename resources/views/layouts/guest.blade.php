@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Quizz-App</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,6 +50,29 @@
         .btn-search {
             border-radius: 0 1.5rem 1.5rem 0 !important;
         }
+        /* Mengatur lebar scrollbar */
+        ::-webkit-scrollbar {
+            width: 3px; /* Untuk scrollbar vertikal */
+            height: 3px; /* Untuk scrollbar horizontal */
+        }
+
+        /* Mengatur tampilan slider di scrollbar */
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.5); /* Warna hitam dengan transparansi 70% */
+            border-radius: 10px; /* Membuat sudutnya bulat (opsional) */
+        }
+
+        /* Mengatur track scrollbar */
+        ::-webkit-scrollbar-track {
+            background: transparent; /* Track scrollbar tetap transparan */
+        }
+
+        /* Mendukung browser lain (opsional) */
+        body {
+            scrollbar-width: 3px; /* Untuk Firefox: membuat scrollbar lebih tipis */
+            scrollbar-color: rgba(0, 0, 0, 0.5) transparent; /* Warna thumb dan track */
+        }
+
     </style>
 </head>
 <body>
