@@ -4,7 +4,7 @@
 @section('content')
 <div class="d-flex justify-content-between">
     <a href="/quizz" class="text-white text-decoration-none fw-bold h5">
-        <i class="bi bi-arrow-left-circle-fill"></i> Kembali
+        <i class="bi bi-arrow-left-circle-fill"></i> Back
     </a>
     <div class="wrapp">
         <h4 class="text-white fw-bold mb-0">
@@ -27,7 +27,7 @@
 </div>
 
 {{-- desc --}}
-<h5 class="text-white fw-bold my-3">Deskripsi</h5>
+<h5 class="text-white fw-bold my-3">Description</h5>
 <div class="card card-body">
     <p class="">
         This is a javascript quiz Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque debitis necessitatibus nostrum, voluptates maiores aspernatur quo facilis? Libero dolore explicabo voluptate fugiat voluptas voluptates, incidunt optio? Modi, tempore natus? Laboriosam?

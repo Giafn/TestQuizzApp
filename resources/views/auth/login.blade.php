@@ -4,7 +4,7 @@
 <div class="vh-100 d-flex align-items-center flex-column justify-content-center">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="text-center mt-3 mb-5">Login to <span class="text-primary fw-bold">Quizz<span></h2>
+                    <h2 class="text-center mt-3 mb-5">Login to <span class="text-primary fw-bold">Quizz-<span class="text-warning">App</span></span></h2>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="mb-3">

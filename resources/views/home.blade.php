@@ -12,6 +12,9 @@
                 <div class="flex-grow-1 ms-3 d-flex justify-content-center flex-column">
                     <span class="text-secondary">Your Poin</span>
                     <h4 class="fw-bold">90 pts </h4>
+                    <small>
+                        global poin
+                    </small>
                 </div>
             </div>
         </div>
@@ -23,6 +26,9 @@
                 <div class="flex-grow-1 ms-3 d-flex justify-content-center flex-column">
                     <span class="text-secondary">Your Rank</span>
                     <h4 class="fw-bold">1st</h4>
+                    <small>
+                        global rank
+                    </small>
                 </div>
             </div>
         </div>
