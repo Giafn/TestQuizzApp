@@ -3,9 +3,9 @@
 @section('title', 'Profile')
 @section('content')
 <div class="text-center">
-    <img src="https://api.dicebear.com/9.x/dylan/svg?seed={{ auth()->user()->name }}" alt="Profile" class="rounded-pill w-100 border border-white" style="max-width: 100px">
-    <h4 class="mt-3 text-white fw-bold">{{ auth()->user()->name }}</h4>
-    <p class="text-white">{{ auth()->user()->email }}</p>
+    <img src="https://api.dicebear.com/9.x/dylan/svg?seed={{ $user->name }}" alt="Profile" class="rounded-pill w-100 border border-white" style="max-width: 100px">
+    <h4 class="mt-3 text-white fw-bold">{{ $user->name }}</h4>
+    <p class="text-white">{{ $user->email }}</p>
 </div>
 <div class="text-center text-white">
     @if (Auth::user()->hasVerifiedEmail())
@@ -19,38 +19,26 @@
 {{-- update email password --}}
 <div class="mt-3">
     <h5 class="fw-bold text-white">Update Email & Password</h5>
-    <form method="POST" action="">
+    <form method="POST" action="/profile/update">
         @csrf
         @method('PUT')
         {{-- name --}}
         <div class="mb-3">
-            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ auth()->user()->name }}" required autocomplete="name" placeholder="Name" autofocus>
-            @error('name')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+            <input id="name" type="text" class="form-control" value="{{ $user->name }}" required autocomplete="name" placeholder="Name" autofocus>
+            <div id="error_name"></div>
         </div>
         <div class="mb-3">
-            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ auth()->user()->email }}" required autocomplete="email" placeholder="Email" autofocus>
-            @error('email')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+            <input id="email" type="email" class="form-control" value="{{ $user->email }}" required autocomplete="email" placeholder="Email" autofocus>
+            <div id="error_email"></div>
         </div>
         {{-- password --}}
         <div class="mb-3">
-            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="New Password">
-            @error('password')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+            <input id="new_password" type="password" class="form-control" required placeholder="New Password">
+            <div id="error_new_password"></div>
         </div>
-        {{-- password confirmation --}}
         <div class="mb-3">
-            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required placeholder="Confirm Password">
+            <input id="confirm_password" type="password" class="form-control" required placeholder="Confirm Password">
+            <div id="error_confirm_password"></div>
         </div>
     </form>
     <button id="openModalConfirmUpdate" class="btn btn-light d-block w-100 fw-bold text-primary mb-3">
@@ -70,22 +58,12 @@
                 <p>
                     Please confirm your password to update your profile.
                 </p>
-                <form method="POST" action="">
-                    @csrf
-                    @method('PUT')
-                    <div class="mb-3">
-                        <input id="current-password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="Password">
-                        @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </form>
+                <input id="current_password" type="password" class="form-control" required placeholder="Password">
+                <div id="error_current_password"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Confirm</button>
+                <button id="confirmSubmit" type="submit" class="btn btn-primary">Confirm</button>
             </div>
         </div>
     </div>
@@ -123,6 +101,61 @@
 
     $('#confirmLogout').click(function() {
         $('#formLogout').submit();
+    });
+
+    $('#confirmSubmit').click(function() {
+        $.ajax({
+            url: '/profile/update',
+            type: 'PUT',
+            data: {
+                _token: '{{ csrf_token() }}',
+                name: $('#name').val(),
+                email: $('#email').val(),
+                new_password: $('#new_password').val(),
+                confirm_password: $('#confirm_password').val(),
+                current_password: $('#current_password').val()
+            },
+            success: function(response) {
+                if (response.status == 'success') {
+                    $('#modalConfirmUpdate').modal('hide');
+                    location.reload();
+                } else {
+                    if (response.data.name) {
+                        $('#error_name').html(response.data.name[0]);
+                        $('#error_name').addClass('text-danger text-xs');
+                    } else {
+                        $('#error_name').html('');
+                    }
+                    if (response.data.email) {
+                        $('#error_email').html(response.data.email[0]);
+                        $('#error_email').addClass('text-danger text-xs');
+                    } else {
+                        $('#error_email').html('');
+                    }
+                    if (response.data.new_password) {
+                        $('#error_new_password').html(response.data.new_password[0]);
+                        $('#error_new_password').addClass('text-danger text-xs');
+                    } else {
+                        $('#error_new_password').html('');
+                    }
+                    if (response.data.confirm_password) {
+                        $('#error_confirm_password').html(response.data.confirm_password[0]);
+                        $('#error_confirm_password').addClass('text-danger text-xs');
+                    } else {
+                        $('#error_confirm_password').html('');
+                    }
+                    if (response.data.current_password) {
+                        $('#error_current_password').html(response.data.current_password[0]);
+                        $('#error_current_password').addClass('text-danger text-xs');
+                    } else {
+                        $('#error_current_password').html('');
+                    }
+                }
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
     });
 </script>
 @endsection

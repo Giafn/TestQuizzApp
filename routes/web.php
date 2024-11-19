@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,9 +12,8 @@ Auth::routes(['verify' => true]);
 Route::get('/home', function () {
     return view('home');
 })->middleware(['auth', 'verified']);
-Route::get('/profile', function () {
-    return view('profile');
-})->middleware('auth');
+Route::get('/profile', [ProfileController::class, 'index'])->middleware(['auth']);
+Route::put('/profile/update', [ProfileController::class, 'update'])->middleware(['auth']);
 Route::get('/quizz', function () {
     return view('quizzes');
 })->middleware(['auth', 'verified']);
