@@ -57,9 +57,6 @@
         {{ __('Update') }}
     </button>
 
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-    </form>
     <button id="openModalConfirmLogout" class="btn btn-danger d-block w-100 fw-bold">
         {{ __('Logout') }}
     </button>
@@ -102,8 +99,11 @@
                 Are you sure you want to logout?
             </div>
             <div class="modal-footer">
+                <form id="formLogout" method="POST" action="{{ route('logout') }}">
+                    @csrf
+                </form>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-danger">Confirm</button>
+                <button id="confirmLogout" class="btn btn-danger">Confirm</button>
             </div>
         </div>
     </div>
@@ -119,6 +119,10 @@
     $('#openModalConfirmLogout').click(function(e) {
         e.preventDefault();
         $('#modalConfirmLogout').modal('show');
+    });
+
+    $('#confirmLogout').click(function() {
+        $('#formLogout').submit();
     });
 </script>
 @endsection
