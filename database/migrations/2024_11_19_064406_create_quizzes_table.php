@@ -15,10 +15,13 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('category_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('class_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('code')->unique();
             $table->enum('visibility', ['private', 'public']);
             $table->string('name');
             $table->text('desc')->nullable();
             $table->integer('min_pts')->default(0);
+            $table->integer('duration')->default(0);
             $table->timestamp('start_time');
             $table->timestamp('end_time');
             $table->timestamps();

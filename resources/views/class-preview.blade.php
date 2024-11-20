@@ -1,13 +1,14 @@
 @extends('layouts.app')
 
-@php
-$kode = 723767223;
-@endphp
-
-@section('title', 'Class - ' . $kode)
+@section('title', 'Class - ' . $class->code)
 @section('content')
+<div class="mb-4">
+    <a href="/classes" class="text-white text-decoration-none fw-bold h5">
+        <i class="bi bi-arrow-left-circle-fill"></i> Back
+    </a>
+</div>
 <h4 class="text-white fw-bold my-3">
-    Javascript Class
+    {{ $class->name }}
 </h4>
 <div class="rounded-3 p-3 bg-white mb-2">
     <div class="row">
@@ -39,37 +40,44 @@ $kode = 723767223;
     <table class="table table-borderless">
         <tr>
             <th>Class Name</th>
-            <td>Javascript Class</td>
+            <td>{{ $class->name }}</td>
         </tr>
         <tr>
             <th>Owner</th>
-            <td>John Doe</td>
+            <td>{{ $class->owner->name }}</td>
         </tr>
         {{-- class code --}}
         <tr>
             <th>Class Code</th>
             <td>
-                <span id="classCode">723767223</span><i class="bi bi-clipboard ms-1" style="cursor: pointer" onclick="copyToClipboard('#classCode')"></i>
+                <span id="classCode">{{ $class->code }}</span><i class="bi bi-clipboard ms-1" style="cursor: pointer" onclick="copyToClipboard('#classCode')"></i>
             </td>
         </tr>
         <tr>
             <th>Created At</th>
-            <td>3 days ago</td>
+            <td>{{ $class->created_at->diffForHumans() }}</td>
         </tr>
         <tr>
             <th>Description</th>
-            <td>This is a javascript class</td>
+            <td>{{ $class->desc }}</td>
         </tr>
     </table>
 </div>
 
-<div class="d-flex mb-3 justify-content-end">
+<div class="d-flex mb-3 justify-content-between">
+    @if (auth()->user()->id == $class->owner->id)
+    <a href="/classes/{{ $class->id }}/setting" class="btn btn-light btn-sm">
+        <i class="bi bi-gear"></i> Setting
+    </a>
+    @endif
     <div class="d-flex gap-1">
+        @if (auth()->user()->id == $class->owner->id)
         <button type="button" class="btn btn-light btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#createQuizz">
             <i class="bi bi-plus"></i> Create
         </button>
+        @endif
         <button type="button" class="btn btn-light btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#showMember">
-            <i class="bi bi-person me-1"></i> 1200
+            <i class="bi bi-person me-1"></i> Member
         </button>
     </div>
 </div>
@@ -131,6 +139,7 @@ $quizzes = [
 </div>
 
 <!-- Modal -->
+@if (auth()->user()->id == $class->owner->id)
 <div class="modal fade" id="createQuizz" tabindex="-1" aria-labelledby="createQuizzLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -181,6 +190,7 @@ $quizzes = [
         </div>
     </div>
 </div>
+@endif
 
 <!-- Modal -->
 <div class="modal fade" id="showMember" tabindex="-1" aria-labelledby="showMemberLabel" aria-hidden="true">
@@ -191,29 +201,16 @@ $quizzes = [
                 <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="memberList" style="height: 500px">
-                {{-- search member --}}
-                <div class="d-flex my-3">
-                    <input type="text" class="bg-white input-search form-control px-4 py-3" style="border: 1px solid #ced4da !important" placeholder="Search Member" aria-label="Search Member" aria-describedby="button-addon2">
-                    <button class="btn bg-white btn-search" type="button" style="border: 1px solid #ced4da !important" id="button-addon2">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
-                <div class="d-flex gap-2 flex-wrap">
-                    @for($i = 0; $i < 100; $i++)
-                    <div class="bg-white rounded shadow-sm p-2 w-100">
-                        <div class="d-flex gap-3 align-items-center">
-                            <img src="https://ui-avatars.com/api/?name=John+Doe&background=random" alt="John Doe" class="rounded-circle" style="width: 50px; height: 50px">
-                            <div class="flex-fill">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold">John Doe</span>
-                                    <span class="text-secondary">
-                                        90 pts
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input id="searchMemberInput" type="text" class="form-control" placeholder="Search member">
+                        <button id="btnSubmitSearch" class="btn btn-secondary" type="button">
+                            <i class="bi bi-search"></i>
+                        </button>
                     </div>
-                    @endfor
+                </div>
+                <div class="d-flex flex-wrap" id="memberList">
+                    
                 </div>
             </div>
         </div>
@@ -223,6 +220,68 @@ $quizzes = [
 
 @section('scripts')
 <script>
+    $(document).ready(function() {
+        loadMember();
+        $('#btnSubmitSearch').click(function() {
+            loadMember($('#searchMemberInput').val());
+        });
+        $('#searchMemberInput').focus(function() {
+            $(this).keypress(function(e) {
+                if(e.which == 13) {
+                    loadMember($(this).val());
+                }
+            });
+        });
+    });
+    function loadMember(search = '') {
+        $.ajax({
+            url: '/classes/{{ $class->id }}/members',
+            method: 'GET',
+            dataType: 'json',
+            data: {
+                search: search
+            },
+            success: function(response) {
+                if (response.status == 'success') {
+                    drawMemberList(response.data.data);
+                } else {
+                    toastr.error(response.message);
+                }
+            }
+        });
+    }
+    function drawMemberList(data) {
+        let memberList = '';
+        data.forEach(member => {
+            memberList += `
+            <div class="bg-white rounded shadow-sm p-2 w-100 member-list mb-1">
+                <div class="d-flex gap-3 align-items-center">
+                    <img src="https://api.dicebear.com/9.x/dylan/svg?seed=${member.name}" alt="${member.name}" class="rounded-circle" style="width: 50px; height: 50px">
+                    <div class="flex-fill">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="flex-fill">
+                                <div class="d-flex flex-column align-items-start w-100">
+                                    <span class="fw-bold">${member.name}</span>
+                                    ${member.is_owner ? 
+                                    '<span class="badge bg-warning d-inline">Owner</span>' 
+                                    : '<span class="text-secondary">join at ' + member.joined_at + '</span>'}
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+        $('.member-list').remove();
+        $('.no-member').remove();
+        $('#memberList').append(memberList);
+
+        if (data.length == 0) {
+            $('#memberList').append('<div class="text-center text-white w-100 no-member">No member found</div>');
+        }
+    }
     function copyToClipboard(element) {
         const text = document.querySelector(element).innerText;
         const input = document.createElement('input');
@@ -232,7 +291,7 @@ $quizzes = [
         document.execCommand('copy');
         document.body.removeChild(input);
 
-        alert('Copied to clipboard');
+        toastr.success('Class code copied to clipboard');
     }
 </script>
 @endsection
