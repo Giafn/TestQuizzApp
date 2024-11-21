@@ -180,10 +180,22 @@
             }
 
             @if(session('success'))
-                toastr.success("{{ session('success') }}")
+                @if(is_array(session('success')))
+                    @foreach(session('success') as $success)
+                        toastr.success("{{ $success }}")
+                    @endforeach
+                @else
+                    toastr.success("{{ session('success') }}")
+                @endif
             @endif
             @if(session('error'))
-                toastr.error("{{ session('error') }}")
+                @if(is_array(session('error')))
+                    @foreach(session('error') as $error)
+                        toastr.error("{{ $error }}")
+                    @endforeach
+                @else
+                    toastr.error("{{ session('error') }}")
+                @endif
             @endif
         });
     </script>

@@ -24,5 +24,10 @@ class Quizz extends Model
         'start_time',
         'end_time',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
     
 }

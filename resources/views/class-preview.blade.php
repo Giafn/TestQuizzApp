@@ -144,43 +144,50 @@ $quizzes = [
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="createQuizzLabel">Create Quizz<span class="text-danger">*</span></h5>
+                <h5 class="modal-title" id="createQuizzLabel">Create Quizz</h5>
                 <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="">
+                <form action="/quizz/create" method="POST">
+                    @csrf
+                    <input type="hidden" name="class_id" value="{{ $class->id }}">
                     <div class="mb-3">
-                        <label for="quizzTitle" class="form-label">Quizz Title<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="quizzTitle" required>
+                        <label for="quizzTitle" class="form-label">Title<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="title" required>
                     </div>
                     <div class="mb-3">
-                        <label for="quizzDescription" class="form-label">Quizz Description<span class="text-secondary text-xs"> - optional</span></label>
-                        <textarea class="form-control" id="quizzDescription" rows="3" required></textarea>
+                        <label for="quizzDescription" class="form-label">Description<span class="text-secondary text-xs"> - optional</span></label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="quizzCategory" class="form-label">Quizz Category<span class="text-danger">*</span></label>
-                        <select class="form-select" id="quizzCategory" required>
+                        <label for="quizzCategory" class="form-label">Category<span class="text-danger">*</span></label>
+                        <select id="categorySelect" class="form-select" name="category" required>
                             <option selected disabled>Select Category</option>
-                            <option value="1">Programming</option>
-                            <option value="2">Math</option>
-                            <option value="3">Science</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="quizzDuration" class="form-label">Quizz Duration<span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" id="quizzDuration" required>
+                        <label for="quizzDuration" class="form-label">Duration<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" name="duration" required>
                     </div>
                     <div class="mb-3">
-                        <label for="quizzPassingGrade" class="form-label">Quizz Passing Grade (%)<span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" id="quizzPassingGrade" required>
+                        <label for="quizzPassingGrade" class="form-label">Passing Grade (%)<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" name="passing_grade" required>
                     </div>
                     <div class="mb-3">
                         <label for="quizzStart" class="form-label">Quizz Start<span class="text-secondary text-xs"> - optional</span></label>
-                        <input type="datetime-local" class="form-control" id="quizzStart" required>
+                        <input type="datetime-local" class="form-control" name="quizz_start">
                     </div>
                     <div class="mb-3">
                         <label for="quizzEnd" class="form-label">Quizz End<span class="text-secondary text-xs"> - optional</span></label>
-                        <input type="datetime-local" class="form-control" id="quizzEnd" required>
+                        <input type="datetime-local" class="form-control" name="quizz_end">
+                    </div>
+                    <div class="mb-3">
+                        <label for="quizzVisibility" class="form-label">Visibility<span class="text-danger">*</span></label>
+                        <select class="form-select" name="visibility" required>
+                            <option selected disabled>Select Visibility</option>
+                            <option value="public">Public</option>
+                            <option value="private">Member Only</option>
+                        </select>
                     </div>
                     <div class="text-end">
                         <button type="submit" class="btn btn-warning">Create</button>
@@ -222,6 +229,7 @@ $quizzes = [
 <script>
     $(document).ready(function() {
         loadMember();
+        loadCategory();
         $('#btnSubmitSearch').click(function() {
             loadMember($('#searchMemberInput').val());
         });
@@ -233,6 +241,7 @@ $quizzes = [
             });
         });
     });
+
     function loadMember(search = '') {
         $.ajax({
             url: '/classes/{{ $class->id }}/members',
@@ -250,6 +259,30 @@ $quizzes = [
             }
         });
     }
+
+    function loadCategory() {
+        $.ajax({
+            url: '/category/all',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.status == 'success') {
+                    drawCategory(response.data);
+                } else {
+                    toastr.error(response.message);
+                }
+            }
+        });
+    }
+
+    function drawCategory(data) {
+        let categoryList = '';
+        data.forEach(category => {
+            categoryList += `<option value="${category.id}">${category.name}</option>`;
+        });
+        $('#categorySelect').append(categoryList);
+    }
+
     function drawMemberList(data) {
         let memberList = '';
         data.forEach(member => {
@@ -282,6 +315,7 @@ $quizzes = [
             $('#memberList').append('<div class="text-center text-white w-100 no-member">No member found</div>');
         }
     }
+
     function copyToClipboard(element) {
         const text = document.querySelector(element).innerText;
         const input = document.createElement('input');
